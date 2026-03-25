@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulário de Aplicação — Consultoria Financeira</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a24;
+    --border: #2a2a3a;
+    --accent: #00e5b0;
+    --accent2: #7b5ea7;
+    --text: #e8e8f0;
+    --text-muted: #7a7a9a;
+    --error: #ff4d6d;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,176,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,176,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 24px 100px;
+  }
+
+  .header { margin-bottom: 56px; animation: fadeUp 0.6s ease both; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,229,176,0.08);
+    border: 1px solid rgba(0,229,176,0.2);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 6px 14px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+
+  .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 1.8s ease infinite;
+  }
+
+  h1 {
+    font-family: var(--sans);
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .subtitle {
+    font-size: 16px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    max-width: 560px;
+    border-left: 2px solid var(--accent2);
+    padding-left: 16px;
+  }
+
+  .progress-bar { margin-bottom: 48px; animation: fadeUp 0.6s 0.1s ease both; }
+
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .progress-track {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+
+  .block { display: none; animation: fadeUp 0.4s ease both; }
+  .block.active { display: block; }
+
+  .block-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .block-number {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(0,229,176,0.08);
+    border: 1px solid rgba(0,229,176,0.15);
+    padding: 4px 10px;
+    border-radius: 3px;
+  }
+
+  .block-title { font-size: 20px; font-weight: 700; }
+
+  .question { margin-bottom: 36px; }
+  .question label { display: block; font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+  .question .q-num { font-family: var(--mono); color: var(--accent); margin-right: 6px; }
+
+  input[type="text"], input[type="email"], input[type="tel"], textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 14px 16px;
+    outline: none;
+    font-family: var(--sans);
+  }
+
+  input:focus, textarea:focus { border-color: var(--accent); }
+
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    cursor: pointer;
+  }
+
+  .option input { display: none; }
+  .option.selected { border-color: var(--accent); background: rgba(0,229,176,0.06); }
+
+  .option-indicator {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+  }
+
+  .option.selected .option-indicator { background: var(--accent); border-color: var(--accent); }
+
+  .nav { display: flex; justify-content: space-between; margin-top: 48px; }
+
+  .btn {
+    font-family: var(--sans);
+    font-weight: 700;
+    padding: 14px 28px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-back { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+  .btn-next { background: var(--accent); color: #000; margin-left: auto; }
+  .btn-submit { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; margin-left: auto; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="header">
+    <div class="badge">Formulário de Aplicação</div>
+    <h1>Antes de começarmos,<br>preciso te <span>conhecer.</span></h1>
+    <p class="subtitle">Leve menos de 5 minutos para alinhar sua realidade financeira.</p>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-meta">
+      <span id="progressLabel">Bloco 1 de 5</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <form id="mainForm" action="https://formspree.io/f/xgopwzwp" method="POST">
+
+    <div class="block active" data-block="1">
+      <div class="block-header"><span class="block-number">01 / 05</span><span class="block-title">Identificação</span></div>
+      <div class="question">
+        <label><span class="q-num">01.</span> Nome completo</label>
+        <input type="text" name="nome" placeholder="Ex: Lucas Ferreira" required>
+      </div>
+      <div class="question">
+        <label><span class="q-num">02.</span> Seu melhor e-mail</label>
+        <input type="email" name="email" placeholder="lucas@email.com" required>
+      </div>
+      <div class="question">
+        <label><span class="q-num">03.</span> WhatsApp</label>
+        <input type="tel" name="whatsapp" placeholder="+55 (11) 99999-9999" required>
+      </div>
+      <div class="nav"><button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button></div>
+    </div>
+
+    <div class="block" data-block="2">
+      <div class="block-header"><span class="block-number">02 / 05</span><span class="block-title">Financeiro</span></div>
+      <div class="question">
+        <label><span class="q-num">04.</span> Faixa de renda mensal média</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="renda" value="ate7k"><div class="option-indicator"></div>Até R$7.000</label>
+          <label class="option"><input type="radio" name="renda" value="7a15k"><div class="option-indicator"></div>R$7.000 a R$15.000</label>
+          <label class="option"><input type="radio" name="renda" value="mais15k"><div class="option-indicator"></div>Acima de R$15.000</label>
+        </div>
+      </div>
+      <div class="nav">
+        <button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button>
+        <button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button>
+      </div>
+    </div>
+
+    <div class="block" data-block="3">
+      <div class="block-header"><span class="block-number">03 / 05</span><span class="block-title">Dores</span></div>
+      <div class="question">
+        <label><span class="q-num">05.</span> Qual seu maior desafio hoje?</label>
+        <textarea name="desafio" placeholder="Ex: Não sobra dinheiro no fim do mês..."></textarea>
+      </div>
+      <div class="nav">
+        <button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button>
+        <button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button>
+      </div>
+    </div>
+
+    <div class="block" data-block="4">
+      <div class="block-header"><span class="block-number">04 / 05</span><span class="block-title">Objetivos</span></div>
+      <div class="question">
+        <label><span class="q-num">06.</span> O que você quer construir?</label>
+        <input type="text" name="objetivo" placeholder="Ex: Independência financeira">
+      </div>
+      <div class="nav">
+        <button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button>
+        <button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button>
+      </div>
+    </div>
+
+    <div class="block" data-block="5">
+      <div class="block-header"><span class="block-number">05 / 05</span><span class="block-title">Finalização</span></div>
+      <div class="question">
+        <label><span class="q-num">07.</span> Alguma observação final?</label>
+        <textarea name="obs_final"></textarea>
+      </div>
+      <div class="nav">
+        <button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button>
+        <button type="submit" class="btn btn-submit">Enviar aplicação ✦</button>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script>
+  let currentBlock = 1;
+  const totalBlocks = 5;
+
+  function updateProgress() {
+    const pct = Math.round(((currentBlock - 1) / totalBlocks) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = `Bloco ${currentBlock} de ${totalBlocks}`;
+    document.getElementById('progressPct').textContent = pct + '%';
+  }
+
+  function showBlock(n) {
+    document.querySelectorAll('.block').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.block[data-block="${n}"]`).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+    updateProgress();
+  }
+
+  function nextBlock() { if (currentBlock < totalBlocks) { currentBlock++; showBlock(currentBlock); } }
+  function prevBlock() { if (currentBlock > 1) { currentBlock--; showBlock(currentBlock); } }
+
+  document.querySelectorAll('.option').forEach(opt => {
+    opt.addEventListener('click', function() {
+      const inp = this.querySelector('input');
+      document.querySelectorAll(`input[name="${inp.name}"]`).forEach(r => r.closest('.option').classList.remove('selected'));
+      inp.checked = true;
+      this.classList.add('selected');
+    });
+  });
+
+  updateProgress();
+</script>
+</body>
+</html>
