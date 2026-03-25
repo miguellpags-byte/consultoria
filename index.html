@@ -762,9 +762,10 @@
 
 <script>
   // ─────────────────────────────────────────────
-  // ⚙️  CONFIGURAÇÃO — substitua pelo seu Form ID
+  // ⚙️  CONFIGURAÇÃO
   // ─────────────────────────────────────────────
   const FORMSPREE_ID = "xaqlwbay";
+  const SHEETS_URL   = "https://script.google.com/macros/s/AKfycbx4gdUXp0_oyO9mQxj_0WyObwqPOIaIGUeA4zfcWTfc180iXW9FbAAJ-d3DQ_QmkNdbbg/exec";
   // ─────────────────────────────────────────────
 
   let currentBlock = 1;
@@ -853,13 +854,22 @@
     const data = collectFormData();
 
     try {
-      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(data)
-      });
+      // Envia para Formspree (e-mail) e Google Sheets ao mesmo tempo
+      const [formspreeRes] = await Promise.all([
+        fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(data)
+        }),
+        fetch(SHEETS_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        })
+      ]);
 
-      if (res.ok) {
+      if (formspreeRes.ok) {
         document.getElementById('mainForm').style.display = 'none';
         document.getElementById('successScreen').classList.add('active');
         document.getElementById('progressFill').style.width = '100%';
