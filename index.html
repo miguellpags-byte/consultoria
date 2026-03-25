@@ -854,31 +854,28 @@
     const data = collectFormData();
 
     try {
-      // Envia para Formspree (e-mail) e Google Sheets ao mesmo tempo
-      const [formspreeRes] = await Promise.all([
-        fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify(data)
-        }),
+      // Envia para Google Sheets (principal) e Formspree (e-mail) ao mesmo tempo
+      await Promise.all([
         fetch(SHEETS_URL, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
-        })
+        }),
+        fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(data)
+        }).catch(() => {}) // e-mail é secundário — ignora erro se falhar
       ]);
 
-      if (formspreeRes.ok) {
-        document.getElementById('mainForm').style.display = 'none';
-        document.getElementById('successScreen').classList.add('active');
-        document.getElementById('progressFill').style.width = '100%';
-        document.getElementById('progressLabel').textContent = 'Concluído';
-        document.getElementById('progressPct').textContent = '100%';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        throw new Error('Formspree error');
-      }
+      // Mostra sucesso assim que Google Sheets receber
+      document.getElementById('mainForm').style.display = 'none';
+      document.getElementById('successScreen').classList.add('active');
+      document.getElementById('progressFill').style.width = '100%';
+      document.getElementById('progressLabel').textContent = 'Concluído';
+      document.getElementById('progressPct').textContent = '100%';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (e) {
       errorEl.classList.add('visible');
       btn.disabled = false;
