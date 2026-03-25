@@ -50,7 +50,7 @@
     padding: 60px 24px 100px;
   }
 
-  .header { margin-bottom: 56px; animation: fadeUp 0.6s ease both; }
+  .header { margin-bottom: 56px; }
 
   .badge {
     display: inline-flex;
@@ -67,20 +67,11 @@
     margin-bottom: 20px;
   }
 
-  .badge::before {
-    content: '';
-    width: 6px; height: 6px;
-    background: var(--accent);
-    border-radius: 50%;
-    animation: pulse 1.8s ease infinite;
-  }
-
   h1 {
     font-family: var(--sans);
     font-size: clamp(28px, 5vw, 42px);
     font-weight: 800;
     line-height: 1.1;
-    letter-spacing: -0.03em;
     margin-bottom: 16px;
   }
 
@@ -90,12 +81,11 @@
     font-size: 16px;
     color: var(--text-muted);
     line-height: 1.65;
-    max-width: 560px;
     border-left: 2px solid var(--accent2);
     padding-left: 16px;
   }
 
-  .progress-bar { margin-bottom: 48px; animation: fadeUp 0.6s 0.1s ease both; }
+  .progress-bar { margin-bottom: 48px; }
 
   .progress-meta {
     display: flex;
@@ -106,190 +96,168 @@
     margin-bottom: 8px;
   }
 
-  .progress-track {
-    height: 3px;
-    background: var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-  }
+  .progress-track { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 0%; transition: width 0.5s ease; }
 
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    border-radius: 2px;
-    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
-    width: 0%;
-  }
-
-  .block { display: none; animation: fadeUp 0.4s ease both; }
+  .block { display: none; }
   .block.active { display: block; }
 
-  .block-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 32px;
-  }
-
-  .block-number {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--accent);
-    background: rgba(0,229,176,0.08);
-    border: 1px solid rgba(0,229,176,0.15);
-    padding: 4px 10px;
-    border-radius: 3px;
-  }
-
+  .block-header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+  .block-number { font-family: var(--mono); font-size: 11px; color: var(--accent); background: rgba(0,229,176,0.08); border: 1px solid rgba(0,229,176,0.15); padding: 4px 10px; border-radius: 3px; }
   .block-title { font-size: 20px; font-weight: 700; }
 
   .question { margin-bottom: 36px; }
   .question label { display: block; font-size: 15px; font-weight: 600; margin-bottom: 12px; }
-  .question .q-num { font-family: var(--mono); color: var(--accent); margin-right: 6px; }
+  .q-num { font-family: var(--mono); color: var(--accent); margin-right: 6px; }
+  .type-tag { font-family: var(--mono); font-size: 10px; background: rgba(123,94,167,0.15); color: var(--accent2); padding: 2px 7px; border-radius: 3px; margin-left: 8px; }
 
-  input[type="text"], input[type="email"], input[type="tel"], textarea {
-    width: 100%;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text);
-    padding: 14px 16px;
-    outline: none;
-    font-family: var(--sans);
-  }
-
+  input, textarea, select { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 14px 16px; font-family: var(--sans); outline: none; }
   input:focus, textarea:focus { border-color: var(--accent); }
 
   .options { display: flex; flex-direction: column; gap: 10px; }
-  .option {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px 16px;
-    cursor: pointer;
-  }
-
+  .options.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .option { display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; cursor: pointer; transition: 0.2s; }
   .option input { display: none; }
   .option.selected { border-color: var(--accent); background: rgba(0,229,176,0.06); }
-
-  .option-indicator {
-    width: 18px; height: 18px;
-    border: 2px solid var(--border);
-    border-radius: 50%;
-  }
-
+  .option-indicator { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 50%; }
   .option.selected .option-indicator { background: var(--accent); border-color: var(--accent); }
 
+  .scale { display: flex; gap: 8px; }
+  .scale-btn { flex: 1; aspect-ratio: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .scale-btn.selected { background: var(--accent); color: #000; font-weight: 700; }
+
   .nav { display: flex; justify-content: space-between; margin-top: 48px; }
-
-  .btn {
-    font-family: var(--sans);
-    font-weight: 700;
-    padding: 14px 28px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-  }
-
+  .btn { font-family: var(--sans); font-weight: 700; padding: 14px 28px; border-radius: 6px; border: none; cursor: pointer; }
   .btn-back { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
   .btn-next { background: var(--accent); color: #000; margin-left: auto; }
   .btn-submit { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; margin-left: auto; }
 
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .terms-box { background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 8px; font-size: 13px; color: var(--text-muted); margin-bottom: 24px; max-height: 200px; overflow-y: auto; }
+
+  .success-screen { display: none; text-align: center; padding: 60px 0; }
+  .success-screen.active { display: block; }
+
+  @media (max-width: 500px) { .options.grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 <div class="wrapper">
-
   <div class="header">
     <div class="badge">Formulário de Aplicação</div>
     <h1>Antes de começarmos,<br>preciso te <span>conhecer.</span></h1>
-    <p class="subtitle">Leve menos de 5 minutos para alinhar sua realidade financeira.</p>
+    <p class="subtitle">Leva menos de 5 minutos para alinhar sua realidade financeira.</p>
   </div>
 
   <div class="progress-bar">
-    <div class="progress-meta">
-      <span id="progressLabel">Bloco 1 de 5</span>
-      <span id="progressPct">0%</span>
-    </div>
+    <div class="progress-meta"><span id="progressLabel">Bloco 1 de 5</span><span id="progressPct">0%</span></div>
     <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
   </div>
 
   <form id="mainForm" action="https://formspree.io/f/xgopwzwp" method="POST">
-
     <div class="block active" data-block="1">
-      <div class="block-header"><span class="block-number">01 / 05</span><span class="block-title">Identificação</span></div>
+      <div class="block-header"><span class="block-number">01 / 05</span><span class="block-title">Quem é você?</span></div>
+      <div class="question"><label><span class="q-num">01.</span> Nome completo</label><input type="text" name="nome" required></div>
+      <div class="question"><label><span class="q-num">02.</span> Melhor e-mail</label><input type="email" name="email" required></div>
+      <div class="question"><label><span class="q-num">03.</span> WhatsApp</label><input type="tel" name="whatsapp" required></div>
       <div class="question">
-        <label><span class="q-num">01.</span> Nome completo</label>
-        <input type="text" name="nome" placeholder="Ex: Lucas Ferreira" required>
+        <label><span class="q-num">04.</span> Profissão/Área atual</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="profissao" value="dev_senior"><div class="option-indicator"></div>Desenvolvedor(a) Sênior/Pleno</label>
+          <label class="option"><input type="radio" name="profissao" value="engenheiro_dados"><div class="option-indicator"></div>Engenheiro(a) de Dados</label>
+          <label class="option"><input type="radio" name="profissao" value="freelancer"><div class="option-indicator"></div>Freelancer</label>
+          <label class="option"><input type="radio" name="profissao" value="outro"><div class="option-indicator"></div>Outra área tech</label>
+        </div>
       </div>
       <div class="question">
-        <label><span class="q-num">02.</span> Seu melhor e-mail</label>
-        <input type="email" name="email" placeholder="lucas@email.com" required>
+        <label><span class="q-num">05.</span> Anos em Tech</label>
+        <div class="options grid">
+          <label class="option"><input type="radio" name="experiencia" value="menos2"><div class="option-indicator"></div>Menos de 2</label>
+          <label class="option"><input type="radio" name="experiencia" value="2a5"><div class="option-indicator"></div>2 a 5</label>
+          <label class="option"><input type="radio" name="experiencia" value="5a10"><div class="option-indicator"></div>5 a 10</label>
+          <label class="option"><input type="radio" name="experiencia" value="mais10"><div class="option-indicator"></div>Mais de 10</label>
+        </div>
       </div>
       <div class="question">
-        <label><span class="q-num">03.</span> WhatsApp</label>
-        <input type="tel" name="whatsapp" placeholder="+55 (11) 99999-9999" required>
+        <label><span class="q-num">06.</span> Vínculo de trabalho</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="vinculo" value="clt"><div class="option-indicator"></div>CLT</label>
+          <label class="option"><input type="radio" name="vinculo" value="pj"><div class="option-indicator"></div>PJ</label>
+          <label class="option"><input type="radio" name="vinculo" value="hibrido"><div class="option-indicator"></div>Híbrido</label>
+        </div>
       </div>
       <div class="nav"><button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button></div>
     </div>
 
     <div class="block" data-block="2">
-      <div class="block-header"><span class="block-number">02 / 05</span><span class="block-title">Financeiro</span></div>
+      <div class="block-header"><span class="block-number">02 / 05</span><span class="block-title">Sua situação hoje</span></div>
       <div class="question">
-        <label><span class="q-num">04.</span> Faixa de renda mensal média</label>
+        <label><span class="q-num">07.</span> Renda mensal média</label>
         <div class="options">
           <label class="option"><input type="radio" name="renda" value="ate7k"><div class="option-indicator"></div>Até R$7.000</label>
           <label class="option"><input type="radio" name="renda" value="7a15k"><div class="option-indicator"></div>R$7.000 a R$15.000</label>
           <label class="option"><input type="radio" name="renda" value="mais15k"><div class="option-indicator"></div>Acima de R$15.000</label>
         </div>
       </div>
-      <div class="nav">
-        <button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button>
-        <button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button>
+      <div class="question"><label><span class="q-num">08.</span> Estabilidade da renda</label><div class="options"><label class="option"><input type="radio" name="estabilidade" value="instavel"><div class="option-indicator"></div>Muito instável</label><label class="option"><input type="radio" name="estabilidade" value="estavel"><div class="option-indicator"></div>Previsível</label></div></div>
+      <div class="question"><label><span class="q-num">09.</span> Comportamento em picos de renda</label><input type="text" name="comportamento_pico"></div>
+      <div class="question"><label><span class="q-num">10.</span> Reserva de emergência</label><div class="options grid"><label class="option"><input type="radio" name="reserva" value="nao"><div class="option-indicator"></div>Não tenho</label><label class="option"><input type="radio" name="reserva" value="sim"><div class="option-indicator"></div>Sim, possuo</label></div></div>
+      <div class="question"><label><span class="q-num">11.</span> Investe regularmente?</label><div class="options"><label class="option"><input type="radio" name="investe" value="sim"><div class="option-indicator"></div>Sim</label><label class="option"><input type="radio" name="investe" value="nao"><div class="option-indicator"></div>Não</label></div></div>
+      <div class="question">
+        <label><span class="q-num">12.</span> Organização (1-5)</label>
+        <div class="scale" id="q12">
+          <button type="button" class="scale-btn" data-val="1" onclick="setScale('q12','org','1')">1</button>
+          <button type="button" class="scale-btn" data-val="2" onclick="setScale('q12','org','2')">2</button>
+          <button type="button" class="scale-btn" data-val="3" onclick="setScale('q12','org','3')">3</button>
+          <button type="button" class="scale-btn" data-val="4" onclick="setScale('q12','org','4')">4</button>
+          <button type="button" class="scale-btn" data-val="5" onclick="setScale('q12','org','5')">5</button>
+        </div>
+        <input type="hidden" name="org_financeira" id="org">
       </div>
+      <div class="nav"><button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button><button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button></div>
     </div>
 
     <div class="block" data-block="3">
-      <div class="block-header"><span class="block-number">03 / 05</span><span class="block-title">Dores</span></div>
+      <div class="block-header"><span class="block-number">03 / 05</span><span class="block-title">Dores e padrões</span></div>
+      <div class="question"><label><span class="q-num">13.</span> Frase que te define</label><input type="text" name="frase_dor"></div>
+      <div class="question"><label><span class="q-num">14.</span> O que já tentou?</label><div class="options"><label class="option"><input type="checkbox" name="tentou" value="planilha"><div class="option-indicator" style="border-radius:4px"></div>Planilhas</label><label class="option"><input type="checkbox" name="tentou" value="apps"><div class="option-indicator" style="border-radius:4px"></div>Aplicativos</label></div></div>
+      <div class="question"><label><span class="q-num">15.</span> Por que falhou?</label><textarea name="falha_anterior"></textarea></div>
       <div class="question">
-        <label><span class="q-num">05.</span> Qual seu maior desafio hoje?</label>
-        <textarea name="desafio" placeholder="Ex: Não sobra dinheiro no fim do mês..."></textarea>
+        <label><span class="q-num">16.</span> Segurança financeira (1-5)</label>
+        <div class="scale" id="q16">
+          <button type="button" class="scale-btn" data-val="1" onclick="setScale('q16','seg','1')">1</button>
+          <button type="button" class="scale-btn" data-val="2" onclick="setScale('q16','seg','2')">2</button>
+          <button type="button" class="scale-btn" data-val="3" onclick="setScale('q16','seg','3')">3</button>
+          <button type="button" class="scale-btn" data-val="4" onclick="setScale('q16','seg','4')">4</button>
+          <button type="button" class="scale-btn" data-val="5" onclick="setScale('q16','seg','5')">5</button>
+        </div>
+        <input type="hidden" name="seguranca" id="seg">
       </div>
-      <div class="nav">
-        <button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button>
-        <button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button>
-      </div>
+      <div class="nav"><button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button><button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button></div>
     </div>
 
     <div class="block" data-block="4">
       <div class="block-header"><span class="block-number">04 / 05</span><span class="block-title">Objetivos</span></div>
-      <div class="question">
-        <label><span class="q-num">06.</span> O que você quer construir?</label>
-        <input type="text" name="objetivo" placeholder="Ex: Independência financeira">
-      </div>
-      <div class="nav">
-        <button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button>
-        <button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button>
-      </div>
+      <div class="question"><label><span class="q-num">17.</span> O que deseja financeiramente?</label><input type="text" name="desejo"></div>
+      <div class="question"><label><span class="q-num">18.</span> Transformação esperada</label><input type="text" name="transformacao"></div>
+      <div class="question"><label><span class="q-num">19.</span> Prazo para resultados</label><div class="options"><label class="option"><input type="radio" name="prazo" value="curto"><div class="option-indicator"></div>Curto prazo</label><label class="option"><input type="radio" name="prazo" value="longo"><div class="option-indicator"></div>Longo prazo</label></div></div>
+      <div class="question"><label><span class="q-num">20.</span> O que seria sucesso absoluto?</label><textarea name="sucesso_abs"></textarea></div>
+      <div class="nav"><button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button><button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button></div>
     </div>
 
     <div class="block" data-block="5">
-      <div class="block-header"><span class="block-number">05 / 05</span><span class="block-title">Finalização</span></div>
-      <div class="question">
-        <label><span class="q-num">07.</span> Alguma observação final?</label>
-        <textarea name="obs_final"></textarea>
-      </div>
-      <div class="nav">
-        <button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button>
-        <button type="submit" class="btn btn-submit">Enviar aplicação ✦</button>
-      </div>
+      <div class="block-header"><span class="block-number">05 / 05</span><span class="block-title">Confirmação</span></div>
+      <div class="question"><label><span class="q-num">21.</span> Frequência de acompanhamento</label><div class="options"><label class="option"><input type="radio" name="frequencia" value="quinzenal"><div class="option-indicator"></div>Quinzenal</label><label class="option"><input type="radio" name="frequencia" value="mensal"><div class="option-indicator"></div>Mensal</label></div></div>
+      <div class="question"><label><span class="q-num">22.</span> Contexto adicional</label><textarea name="contexto"></textarea></div>
+      <div class="terms-box"><h4>📋 Termos</h4><p>Ao enviar, você autoriza o tratamento dos dados conforme LGPD para fins de consultoria financeira.</p></div>
+      <div class="question"><label><span class="q-num">23.</span> Concorda com os termos?</label><div class="options"><label class="option"><input type="radio" name="termos" value="aceito" required><div class="option-indicator"></div>Aceito</label></div></div>
+      <div class="nav"><button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button><button type="submit" class="btn btn-submit">Enviar aplicação ✦</button></div>
     </div>
-
   </form>
+
+  <div class="success-screen" id="successScreen">
+    <h2>Aplicação recebida com sucesso!</h2>
+    <p>Em breve entrarei em contato via WhatsApp.</p>
+  </div>
 </div>
 
 <script>
@@ -313,12 +281,23 @@
   function nextBlock() { if (currentBlock < totalBlocks) { currentBlock++; showBlock(currentBlock); } }
   function prevBlock() { if (currentBlock > 1) { currentBlock--; showBlock(currentBlock); } }
 
+  function setScale(containerId, fieldName, val) {
+    const container = document.getElementById(containerId);
+    container.querySelectorAll('.scale-btn').forEach(btn => btn.classList.toggle('selected', btn.dataset.val === val));
+    document.getElementById(fieldName).value = val;
+  }
+
   document.querySelectorAll('.option').forEach(opt => {
     opt.addEventListener('click', function() {
       const inp = this.querySelector('input');
-      document.querySelectorAll(`input[name="${inp.name}"]`).forEach(r => r.closest('.option').classList.remove('selected'));
-      inp.checked = true;
-      this.classList.add('selected');
+      if (inp.type === 'radio') {
+        document.querySelectorAll(`input[name="${inp.name}"]`).forEach(r => r.closest('.option').classList.remove('selected'));
+        inp.checked = true;
+        this.classList.add('selected');
+      } else {
+        inp.checked = !inp.checked;
+        this.classList.toggle('selected', inp.checked);
+      }
     });
   });
 
