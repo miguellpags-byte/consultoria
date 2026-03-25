@@ -50,7 +50,7 @@
     padding: 60px 24px 100px;
   }
 
-  .header { margin-bottom: 56px; }
+  .header { margin-bottom: 56px; animation: fadeUp 0.6s ease both; }
 
   .badge {
     display: inline-flex;
@@ -67,11 +67,20 @@
     margin-bottom: 20px;
   }
 
+  .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 1.8s ease infinite;
+  }
+
   h1 {
     font-family: var(--sans);
     font-size: clamp(28px, 5vw, 42px);
     font-weight: 800;
     line-height: 1.1;
+    letter-spacing: -0.03em;
     margin-bottom: 16px;
   }
 
@@ -81,11 +90,12 @@
     font-size: 16px;
     color: var(--text-muted);
     line-height: 1.65;
+    max-width: 560px;
     border-left: 2px solid var(--accent2);
     padding-left: 16px;
   }
 
-  .progress-bar { margin-bottom: 48px; }
+  .progress-bar { margin-bottom: 48px; animation: fadeUp 0.6s 0.1s ease both; }
 
   .progress-meta {
     display: flex;
@@ -96,171 +106,667 @@
     margin-bottom: 8px;
   }
 
-  .progress-track { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 0%; transition: width 0.5s ease; }
+  .progress-track {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
 
-  .block { display: none; }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+
+  .block { display: none; animation: fadeUp 0.4s ease both; }
   .block.active { display: block; }
 
-  .block-header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
-  .block-number { font-family: var(--mono); font-size: 11px; color: var(--accent); background: rgba(0,229,176,0.08); border: 1px solid rgba(0,229,176,0.15); padding: 4px 10px; border-radius: 3px; }
-  .block-title { font-size: 20px; font-weight: 700; }
+  .block-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .block-number {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(0,229,176,0.08);
+    border: 1px solid rgba(0,229,176,0.15);
+    padding: 4px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .block-title { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
 
   .question { margin-bottom: 36px; }
-  .question label { display: block; font-size: 15px; font-weight: 600; margin-bottom: 12px; }
-  .q-num { font-family: var(--mono); color: var(--accent); margin-right: 6px; }
-  .type-tag { font-family: var(--mono); font-size: 10px; background: rgba(123,94,167,0.15); color: var(--accent2); padding: 2px 7px; border-radius: 3px; margin-left: 8px; }
 
-  input, textarea, select { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 14px 16px; font-family: var(--sans); outline: none; }
-  input:focus, textarea:focus { border-color: var(--accent); }
+  .question label {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  .question label .q-num {
+    font-family: var(--mono);
+    color: var(--accent);
+    font-size: 12px;
+    margin-right: 6px;
+  }
+
+  .question .hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: -8px;
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 14px 16px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  input:focus, textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,229,176,0.08);
+  }
+
+  textarea { resize: vertical; min-height: 100px; }
 
   .options { display: flex; flex-direction: column; gap: 10px; }
   .options.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .option { display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; cursor: pointer; transition: 0.2s; }
+
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    user-select: none;
+  }
+
+  .option:hover { border-color: rgba(0,229,176,0.35); background: var(--surface2); }
   .option input { display: none; }
-  .option.selected { border-color: var(--accent); background: rgba(0,229,176,0.06); }
-  .option-indicator { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 50%; }
-  .option.selected .option-indicator { background: var(--accent); border-color: var(--accent); }
+
+  .option.selected {
+    border-color: var(--accent);
+    background: rgba(0,229,176,0.06);
+  }
+
+  .option-indicator {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: border-color 0.2s, background 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .option-indicator.sq { border-radius: 4px; }
+
+  .option.selected .option-indicator {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  .option.selected .option-indicator::after {
+    content: '✓';
+    font-size: 10px;
+    color: #000;
+    font-weight: 700;
+  }
+
+  .option-text { font-size: 14px; line-height: 1.4; }
 
   .scale { display: flex; gap: 8px; }
-  .scale-btn { flex: 1; aspect-ratio: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; }
-  .scale-btn.selected { background: var(--accent); color: #000; font-weight: 700; }
 
-  .nav { display: flex; justify-content: space-between; margin-top: 48px; }
-  .btn { font-family: var(--sans); font-weight: 700; padding: 14px 28px; border-radius: 6px; border: none; cursor: pointer; }
-  .btn-back { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+  .scale-btn {
+    flex: 1;
+    aspect-ratio: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .scale-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .scale-btn.selected { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 700; }
+
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-family: var(--mono);
+  }
+
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 48px;
+    gap: 12px;
+  }
+
+  .btn {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 14px 28px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-back {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .btn-back:hover { border-color: var(--text-muted); color: var(--text); }
+
   .btn-next { background: var(--accent); color: #000; margin-left: auto; }
-  .btn-submit { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; margin-left: auto; }
+  .btn-next:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,229,176,0.25); }
 
-  .terms-box { background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 8px; font-size: 13px; color: var(--text-muted); margin-bottom: 24px; max-height: 200px; overflow-y: auto; }
+  .btn-submit {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-submit:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-  .success-screen { display: none; text-align: center; padding: 60px 0; }
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+
+  .btn-submit.loading .spinner { display: block; }
+  .btn-submit.loading .btn-label { display: none; }
+
+  .terms-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 24px;
+    max-height: 220px;
+    overflow-y: auto;
+  }
+
+  .terms-box h4 { color: var(--text); font-size: 14px; margin-bottom: 12px; }
+  .terms-box p { margin-bottom: 10px; }
+
+  .sep {
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    margin: 32px 0;
+    opacity: 0.2;
+  }
+
+  /* Error message */
+  .form-error {
+    display: none;
+    background: rgba(255,77,109,0.1);
+    border: 1px solid rgba(255,77,109,0.3);
+    color: var(--error);
+    font-size: 13px;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-top: 16px;
+    font-family: var(--mono);
+  }
+  .form-error.visible { display: block; }
+
+  /* Success */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 0;
+    animation: fadeUp 0.6s ease both;
+  }
+
   .success-screen.active { display: block; }
 
-  @media (max-width: 500px) { .options.grid { grid-template-columns: 1fr; } }
+  .success-icon {
+    width: 80px; height: 80px;
+    background: rgba(0,229,176,0.1);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    margin: 0 auto 28px;
+  }
+
+  .success-screen h2 {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+  }
+
+  .success-screen p {
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 500px;
+    margin: 0 auto 12px;
+  }
+
+  .success-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(0,229,176,0.08);
+    border: 1px solid rgba(0,229,176,0.2);
+    padding: 5px 12px;
+    border-radius: 3px;
+    margin-top: 12px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 500px) {
+    .options.grid { grid-template-columns: 1fr; }
+    .scale { gap: 4px; }
+    .scale-btn { font-size: 12px; }
+  }
 </style>
 </head>
 <body>
 <div class="wrapper">
+
   <div class="header">
     <div class="badge">Formulário de Aplicação</div>
     <h1>Antes de começarmos,<br>preciso te <span>conhecer.</span></h1>
-    <p class="subtitle">Leva menos de 5 minutos para alinhar sua realidade financeira.</p>
+    <p class="subtitle">Responda com sinceridade — não há respostas certas ou erradas. Suas respostas vão me ajudar a entender sua realidade e preparar uma conversa que realmente faça sentido para você. Leva menos de 5 minutos.</p>
   </div>
 
   <div class="progress-bar">
-    <div class="progress-meta"><span id="progressLabel">Bloco 1 de 5</span><span id="progressPct">0%</span></div>
-    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-meta">
+      <span id="progressLabel">Bloco 1 de 5</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
   </div>
 
-  <form id="mainForm" action="https://formspree.io/f/xgopwzwp" method="POST">
+  <form id="mainForm" novalidate>
+
+    <!-- BLOCO 1 -->
     <div class="block active" data-block="1">
-      <div class="block-header"><span class="block-number">01 / 05</span><span class="block-title">Quem é você?</span></div>
-      <div class="question"><label><span class="q-num">01.</span> Nome completo</label><input type="text" name="nome" required></div>
-      <div class="question"><label><span class="q-num">02.</span> Melhor e-mail</label><input type="email" name="email" required></div>
-      <div class="question"><label><span class="q-num">03.</span> WhatsApp</label><input type="tel" name="whatsapp" required></div>
+      <div class="block-header">
+        <span class="block-number">01 / 05</span>
+        <span class="block-title">Quem é você?</span>
+      </div>
+
       <div class="question">
-        <label><span class="q-num">04.</span> Profissão/Área atual</label>
-        <div class="options">
-          <label class="option"><input type="radio" name="profissao" value="dev_senior"><div class="option-indicator"></div>Desenvolvedor(a) Sênior/Pleno</label>
-          <label class="option"><input type="radio" name="profissao" value="engenheiro_dados"><div class="option-indicator"></div>Engenheiro(a) de Dados</label>
-          <label class="option"><input type="radio" name="profissao" value="freelancer"><div class="option-indicator"></div>Freelancer</label>
-          <label class="option"><input type="radio" name="profissao" value="outro"><div class="option-indicator"></div>Outra área tech</label>
+        <label><span class="q-num">01.</span> Qual é o seu primeiro e último nome?</label>
+        <input type="text" name="Nome" placeholder="Ex: Lucas Ferreira" required>
+      </div>
+
+      <div class="question">
+        <label><span class="q-num">02.</span> Qual é o seu melhor e-mail?</label>
+        <input type="email" name="Email" placeholder="lucas@email.com" required>
+      </div>
+
+      <div class="question">
+        <label><span class="q-num">03.</span> Qual é o seu WhatsApp?</label>
+        <input type="tel" name="WhatsApp" placeholder="+55 (11) 99999-9999" required>
+      </div>
+
+      <div class="question">
+        <label><span class="q-num">04.</span> Qual é a sua profissão/área de atuação atual?</label>
+        <div class="options" id="q04">
+          <label class="option"><input type="radio" name="Profissão" value="Desenvolvedor(a) Sênior ou Pleno"><div class="option-indicator"></div><span class="option-text">Desenvolvedor(a) Sênior ou Pleno</span></label>
+          <label class="option"><input type="radio" name="Profissão" value="Engenheiro(a) de Dados / Analytics"><div class="option-indicator"></div><span class="option-text">Engenheiro(a) de Dados / Analytics</span></label>
+          <label class="option"><input type="radio" name="Profissão" value="Especialista em Cloud / Cibersegurança"><div class="option-indicator"></div><span class="option-text">Especialista em Cloud / Cibersegurança</span></label>
+          <label class="option"><input type="radio" name="Profissão" value="Consultor(a) Técnico Independente"><div class="option-indicator"></div><span class="option-text">Consultor(a) Técnico Independente</span></label>
+          <label class="option"><input type="radio" name="Profissão" value="Freelancer (clientes nacionais ou internacionais)"><div class="option-indicator"></div><span class="option-text">Freelancer (com clientes nacionais ou internacionais)</span></label>
+          <label class="option"><input type="radio" name="Profissão" value="Outra área de tecnologia"><div class="option-indicator"></div><span class="option-text">Outra área de tecnologia</span></label>
         </div>
       </div>
+
       <div class="question">
-        <label><span class="q-num">05.</span> Anos em Tech</label>
+        <label><span class="q-num">05.</span> Há quantos anos você atua na área de tech?</label>
         <div class="options grid">
-          <label class="option"><input type="radio" name="experiencia" value="menos2"><div class="option-indicator"></div>Menos de 2</label>
-          <label class="option"><input type="radio" name="experiencia" value="2a5"><div class="option-indicator"></div>2 a 5</label>
-          <label class="option"><input type="radio" name="experiencia" value="5a10"><div class="option-indicator"></div>5 a 10</label>
-          <label class="option"><input type="radio" name="experiencia" value="mais10"><div class="option-indicator"></div>Mais de 10</label>
+          <label class="option"><input type="radio" name="Tempo de atuação" value="Menos de 2 anos"><div class="option-indicator"></div><span class="option-text">Menos de 2 anos</span></label>
+          <label class="option"><input type="radio" name="Tempo de atuação" value="2 a 5 anos"><div class="option-indicator"></div><span class="option-text">2 a 5 anos</span></label>
+          <label class="option"><input type="radio" name="Tempo de atuação" value="5 a 10 anos"><div class="option-indicator"></div><span class="option-text">5 a 10 anos</span></label>
+          <label class="option"><input type="radio" name="Tempo de atuação" value="Mais de 10 anos"><div class="option-indicator"></div><span class="option-text">Mais de 10 anos</span></label>
         </div>
       </div>
+
       <div class="question">
-        <label><span class="q-num">06.</span> Vínculo de trabalho</label>
+        <label><span class="q-num">06.</span> Como você se enquadra em termos de vínculo de trabalho?</label>
         <div class="options">
-          <label class="option"><input type="radio" name="vinculo" value="clt"><div class="option-indicator"></div>CLT</label>
-          <label class="option"><input type="radio" name="vinculo" value="pj"><div class="option-indicator"></div>PJ</label>
-          <label class="option"><input type="radio" name="vinculo" value="hibrido"><div class="option-indicator"></div>Híbrido</label>
+          <label class="option"><input type="radio" name="Vínculo de trabalho" value="CLT (funcionário contratado)"><div class="option-indicator"></div><span class="option-text">CLT (funcionário contratado)</span></label>
+          <label class="option"><input type="radio" name="Vínculo de trabalho" value="PJ (pessoa jurídica, contrato fixo)"><div class="option-indicator"></div><span class="option-text">PJ (pessoa jurídica, contrato fixo)</span></label>
+          <label class="option"><input type="radio" name="Vínculo de trabalho" value="Freelancer / projetos variáveis"><div class="option-indicator"></div><span class="option-text">Freelancer / projetos variáveis</span></label>
+          <label class="option"><input type="radio" name="Vínculo de trabalho" value="Modelo híbrido (CLT + PJ / freelas)"><div class="option-indicator"></div><span class="option-text">Modelo híbrido (CLT + PJ / freelas)</span></label>
         </div>
       </div>
-      <div class="nav"><button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button></div>
+
+      <div class="nav">
+        <span></span>
+        <button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button>
+      </div>
     </div>
 
+    <!-- BLOCO 2 -->
     <div class="block" data-block="2">
-      <div class="block-header"><span class="block-number">02 / 05</span><span class="block-title">Sua situação hoje</span></div>
+      <div class="block-header">
+        <span class="block-number">02 / 05</span>
+        <span class="block-title">Sua situação financeira hoje</span>
+      </div>
+
       <div class="question">
-        <label><span class="q-num">07.</span> Renda mensal média</label>
+        <label><span class="q-num">07.</span> Qual é a faixa da sua renda mensal média?</label>
+        <p class="hint">Considere todos os vínculos (CLT, PJ, freelas, etc.)</p>
         <div class="options">
-          <label class="option"><input type="radio" name="renda" value="ate7k"><div class="option-indicator"></div>Até R$7.000</label>
-          <label class="option"><input type="radio" name="renda" value="7a15k"><div class="option-indicator"></div>R$7.000 a R$15.000</label>
-          <label class="option"><input type="radio" name="renda" value="mais15k"><div class="option-indicator"></div>Acima de R$15.000</label>
+          <label class="option"><input type="radio" name="Faixa de renda" value="Até R$7.000"><div class="option-indicator"></div><span class="option-text">Até R$7.000</span></label>
+          <label class="option"><input type="radio" name="Faixa de renda" value="R$7.000 a R$10.000"><div class="option-indicator"></div><span class="option-text">R$7.000 a R$10.000</span></label>
+          <label class="option"><input type="radio" name="Faixa de renda" value="R$10.000 a R$15.000"><div class="option-indicator"></div><span class="option-text">R$10.000 a R$15.000</span></label>
+          <label class="option"><input type="radio" name="Faixa de renda" value="Acima de R$15.000"><div class="option-indicator"></div><span class="option-text">Acima de R$15.000</span></label>
         </div>
       </div>
-      <div class="question"><label><span class="q-num">08.</span> Estabilidade da renda</label><div class="options"><label class="option"><input type="radio" name="estabilidade" value="instavel"><div class="option-indicator"></div>Muito instável</label><label class="option"><input type="radio" name="estabilidade" value="estavel"><div class="option-indicator"></div>Previsível</label></div></div>
-      <div class="question"><label><span class="q-num">09.</span> Comportamento em picos de renda</label><input type="text" name="comportamento_pico"></div>
-      <div class="question"><label><span class="q-num">10.</span> Reserva de emergência</label><div class="options grid"><label class="option"><input type="radio" name="reserva" value="nao"><div class="option-indicator"></div>Não tenho</label><label class="option"><input type="radio" name="reserva" value="sim"><div class="option-indicator"></div>Sim, possuo</label></div></div>
-      <div class="question"><label><span class="q-num">11.</span> Investe regularmente?</label><div class="options"><label class="option"><input type="radio" name="investe" value="sim"><div class="option-indicator"></div>Sim</label><label class="option"><input type="radio" name="investe" value="nao"><div class="option-indicator"></div>Não</label></div></div>
+
       <div class="question">
-        <label><span class="q-num">12.</span> Organização (1-5)</label>
+        <label><span class="q-num">08.</span> Essa renda costuma ser:</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="Estabilidade da renda" value="Muito instável — varia bastante todo mês"><div class="option-indicator"></div><span class="option-text">Muito instável — varia bastante todo mês</span></label>
+          <label class="option"><input type="radio" name="Estabilidade da renda" value="Moderadamente instável — tenho uma base, mas com variação"><div class="option-indicator"></div><span class="option-text">Moderadamente instável — tenho uma base, mas com variação</span></label>
+          <label class="option"><input type="radio" name="Estabilidade da renda" value="Relativamente estável — muda pouco"><div class="option-indicator"></div><span class="option-text">Relativamente estável — muda pouco</span></label>
+          <label class="option"><input type="radio" name="Estabilidade da renda" value="Bastante previsível — sei o que vai entrar"><div class="option-indicator"></div><span class="option-text">Bastante previsível — sei o que vai entrar</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label><span class="q-num">09.</span> Quando sua renda aumenta, o que costuma acontecer?</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="Comportamento em mês bom" value="Gasto mais automaticamente — padrão de vida sobe junto"><div class="option-indicator"></div><span class="option-text">Gasto mais automaticamente — o padrão de vida sobe junto</span></label>
+          <label class="option"><input type="radio" name="Comportamento em mês bom" value="Consigo guardar um pouco, mas sem critério"><div class="option-indicator"></div><span class="option-text">Consigo guardar um pouco, mas sem critério</span></label>
+          <label class="option"><input type="radio" name="Comportamento em mês bom" value="Aumento meus aportes de investimento"><div class="option-indicator"></div><span class="option-text">Aumento meus aportes de investimento</span></label>
+          <label class="option"><input type="radio" name="Comportamento em mês bom" value="Não percebo muita diferença no final do mês"><div class="option-indicator"></div><span class="option-text">Não percebo muita diferença no final do mês</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label><span class="q-num">10.</span> Hoje você possui reserva de emergência?</label>
+        <div class="options grid">
+          <label class="option"><input type="radio" name="Reserva de emergência" value="Não tenho"><div class="option-indicator"></div><span class="option-text">Não tenho</span></label>
+          <label class="option"><input type="radio" name="Reserva de emergência" value="Menos de 3 meses de despesas"><div class="option-indicator"></div><span class="option-text">Menos de 3 meses</span></label>
+          <label class="option"><input type="radio" name="Reserva de emergência" value="Entre 3 e 6 meses"><div class="option-indicator"></div><span class="option-text">Entre 3 e 6 meses</span></label>
+          <label class="option"><input type="radio" name="Reserva de emergência" value="Mais de 6 meses"><div class="option-indicator"></div><span class="option-text">Mais de 6 meses</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label><span class="q-num">11.</span> Você investe regularmente pensando no futuro?</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="Hábito de investimento" value="Não invisto — não sobra nada no final do mês"><div class="option-indicator"></div><span class="option-text">Não invisto — não sobra nada no final do mês</span></label>
+          <label class="option"><input type="radio" name="Hábito de investimento" value="Invisto ocasionalmente, sem estratégia"><div class="option-indicator"></div><span class="option-text">Invisto ocasionalmente, sem estratégia</span></label>
+          <label class="option"><input type="radio" name="Hábito de investimento" value="Invisto com alguma frequência (cripto, Tesouro, fundos…)"><div class="option-indicator"></div><span class="option-text">Invisto com alguma frequência (cripto, Tesouro, fundos…)</span></label>
+          <label class="option"><input type="radio" name="Hábito de investimento" value="Invisto de forma consciente e regular, com objetivo claro"><div class="option-indicator"></div><span class="option-text">Invisto de forma consciente e regular, com objetivo claro</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label><span class="q-num">12.</span> Como você avalia sua organização financeira hoje? (1 a 5)</label>
         <div class="scale" id="q12">
-          <button type="button" class="scale-btn" data-val="1" onclick="setScale('q12','org','1')">1</button>
-          <button type="button" class="scale-btn" data-val="2" onclick="setScale('q12','org','2')">2</button>
-          <button type="button" class="scale-btn" data-val="3" onclick="setScale('q12','org','3')">3</button>
-          <button type="button" class="scale-btn" data-val="4" onclick="setScale('q12','org','4')">4</button>
-          <button type="button" class="scale-btn" data-val="5" onclick="setScale('q12','org','5')">5</button>
+          <button type="button" class="scale-btn" data-val="1" onclick="setScale('q12','Organização financeira','1')">1</button>
+          <button type="button" class="scale-btn" data-val="2" onclick="setScale('q12','Organização financeira','2')">2</button>
+          <button type="button" class="scale-btn" data-val="3" onclick="setScale('q12','Organização financeira','3')">3</button>
+          <button type="button" class="scale-btn" data-val="4" onclick="setScale('q12','Organização financeira','4')">4</button>
+          <button type="button" class="scale-btn" data-val="5" onclick="setScale('q12','Organização financeira','5')">5</button>
         </div>
-        <input type="hidden" name="org_financeira" id="org">
+        <div class="scale-labels"><span>Totalmente desorganizado</span><span>Muito bem estruturado</span></div>
+        <input type="hidden" name="Organização financeira" id="Organização financeira">
       </div>
-      <div class="nav"><button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button><button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button></div>
+
+      <div class="nav">
+        <button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button>
+        <button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button>
+      </div>
     </div>
 
+    <!-- BLOCO 3 -->
     <div class="block" data-block="3">
-      <div class="block-header"><span class="block-number">03 / 05</span><span class="block-title">Dores e padrões</span></div>
-      <div class="question"><label><span class="q-num">13.</span> Frase que te define</label><input type="text" name="frase_dor"></div>
-      <div class="question"><label><span class="q-num">14.</span> O que já tentou?</label><div class="options"><label class="option"><input type="checkbox" name="tentou" value="planilha"><div class="option-indicator" style="border-radius:4px"></div>Planilhas</label><label class="option"><input type="checkbox" name="tentou" value="apps"><div class="option-indicator" style="border-radius:4px"></div>Aplicativos</label></div></div>
-      <div class="question"><label><span class="q-num">15.</span> Por que falhou?</label><textarea name="falha_anterior"></textarea></div>
-      <div class="question">
-        <label><span class="q-num">16.</span> Segurança financeira (1-5)</label>
-        <div class="scale" id="q16">
-          <button type="button" class="scale-btn" data-val="1" onclick="setScale('q16','seg','1')">1</button>
-          <button type="button" class="scale-btn" data-val="2" onclick="setScale('q16','seg','2')">2</button>
-          <button type="button" class="scale-btn" data-val="3" onclick="setScale('q16','seg','3')">3</button>
-          <button type="button" class="scale-btn" data-val="4" onclick="setScale('q16','seg','4')">4</button>
-          <button type="button" class="scale-btn" data-val="5" onclick="setScale('q16','seg','5')">5</button>
-        </div>
-        <input type="hidden" name="seguranca" id="seg">
+      <div class="block-header">
+        <span class="block-number">03 / 05</span>
+        <span class="block-title">Dores e padrões</span>
       </div>
-      <div class="nav"><button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button><button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button></div>
+
+      <div class="question">
+        <label><span class="q-num">13.</span> Com qual frase você mais se identifica hoje?</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="Frase de identificação" value="Ganho bem, mas não sei pra onde meu dinheiro vai"><div class="option-indicator"></div><span class="option-text">"Ganho bem, mas não sei pra onde meu dinheiro vai"</span></label>
+          <label class="option"><input type="radio" name="Frase de identificação" value="No final do mês nunca sobra o que eu esperava"><div class="option-indicator"></div><span class="option-text">"No final do mês nunca sobra o que eu esperava"</span></label>
+          <label class="option"><input type="radio" name="Frase de identificação" value="Tenho medo de o dinheiro parar de entrar"><div class="option-indicator"></div><span class="option-text">"Tenho medo de o dinheiro parar de entrar"</span></label>
+          <label class="option"><input type="radio" name="Frase de identificação" value="Estou sempre no improviso — é um mês bom, outro ruim"><div class="option-indicator"></div><span class="option-text">"Estou sempre no improviso — é um mês bom, outro ruim"</span></label>
+          <label class="option"><input type="radio" name="Frase de identificação" value="Sinto que estou fazendo dinheiro, mas não evoluindo"><div class="option-indicator"></div><span class="option-text">"Sinto que estou fazendo dinheiro, mas não evoluindo"</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label><span class="q-num">14.</span> O que você já tentou para organizar sua vida financeira? <em style="font-weight:400;color:var(--text-muted)">(pode marcar mais de uma)</em></label>
+        <div class="options">
+          <label class="option"><input type="checkbox" name="O que já tentou" value="Planilhas (Excel / Notion / Google Sheets)"><div class="option-indicator sq"></div><span class="option-text">Planilhas (Excel / Notion / Google Sheets)</span></label>
+          <label class="option"><input type="checkbox" name="O que já tentou" value="Aplicativos financeiros (Mobills, GuiaBolso, etc.)"><div class="option-indicator sq"></div><span class="option-text">Aplicativos financeiros (Mobills, GuiaBolso, etc.)</span></label>
+          <label class="option"><input type="checkbox" name="O que já tentou" value="Assessor de banco ou corretora"><div class="option-indicator sq"></div><span class="option-text">Assessor de banco ou corretora</span></label>
+          <label class="option"><input type="checkbox" name="O que já tentou" value="Investimentos soltos sem estratégia (Tesouro, cripto, fundos)"><div class="option-indicator sq"></div><span class="option-text">Investimentos soltos sem estratégia (Tesouro, cripto, fundos)</span></label>
+          <label class="option"><input type="checkbox" name="O que já tentou" value="Nada ainda — estou começando agora"><div class="option-indicator sq"></div><span class="option-text">Nada ainda — estou começando agora</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label><span class="q-num">15.</span> Por que acha que as tentativas anteriores não funcionaram?</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="Por que não funcionou" value="Tudo era muito genérico — nada pensado pra renda variável"><div class="option-indicator"></div><span class="option-text">Tudo era muito genérico — nada pensado pra renda variável</span></label>
+          <label class="option"><input type="radio" name="Por que não funcionou" value="Falta de continuidade — começo, abandono e recomeço"><div class="option-indicator"></div><span class="option-text">Falta de continuidade — começo, abandono e recomeço</span></label>
+          <label class="option"><input type="radio" name="Por que não funcionou" value="Assessor só queria empurrar produto, não resolver meu problema"><div class="option-indicator"></div><span class="option-text">Assessor só queria empurrar produto, não resolver meu problema</span></label>
+          <label class="option"><input type="radio" name="Por que não funcionou" value="Faltava uma visão de sistema — cada coisa era solta"><div class="option-indicator"></div><span class="option-text">Faltava uma visão de sistema — cada coisa era solta</span></label>
+          <label class="option"><input type="radio" name="Por que não funcionou" value="N/A — não tentei nada ainda"><div class="option-indicator"></div><span class="option-text">N/A — não tentei nada ainda</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label><span class="q-num">16.</span> Você sente segurança financeira hoje? (1 a 5)</label>
+        <div class="scale" id="q16">
+          <button type="button" class="scale-btn" data-val="1" onclick="setScale('q16','Segurança financeira','1')">1</button>
+          <button type="button" class="scale-btn" data-val="2" onclick="setScale('q16','Segurança financeira','2')">2</button>
+          <button type="button" class="scale-btn" data-val="3" onclick="setScale('q16','Segurança financeira','3')">3</button>
+          <button type="button" class="scale-btn" data-val="4" onclick="setScale('q16','Segurança financeira','4')">4</button>
+          <button type="button" class="scale-btn" data-val="5" onclick="setScale('q16','Segurança financeira','5')">5</button>
+        </div>
+        <div class="scale-labels"><span>Muito inseguro(a)</span><span>Muito seguro(a)</span></div>
+        <input type="hidden" name="Segurança financeira" id="Segurança financeira">
+      </div>
+
+      <div class="nav">
+        <button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button>
+        <button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button>
+      </div>
     </div>
 
+    <!-- BLOCO 4 -->
     <div class="block" data-block="4">
-      <div class="block-header"><span class="block-number">04 / 05</span><span class="block-title">Objetivos</span></div>
-      <div class="question"><label><span class="q-num">17.</span> O que deseja financeiramente?</label><input type="text" name="desejo"></div>
-      <div class="question"><label><span class="q-num">18.</span> Transformação esperada</label><input type="text" name="transformacao"></div>
-      <div class="question"><label><span class="q-num">19.</span> Prazo para resultados</label><div class="options"><label class="option"><input type="radio" name="prazo" value="curto"><div class="option-indicator"></div>Curto prazo</label><label class="option"><input type="radio" name="prazo" value="longo"><div class="option-indicator"></div>Longo prazo</label></div></div>
-      <div class="question"><label><span class="q-num">20.</span> O que seria sucesso absoluto?</label><textarea name="sucesso_abs"></textarea></div>
-      <div class="nav"><button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button><button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button></div>
+      <div class="block-header">
+        <span class="block-number">04 / 05</span>
+        <span class="block-title">O que você quer construir</span>
+      </div>
+
+      <div class="question">
+        <label><span class="q-num">17.</span> Pensando no futuro, o que você mais deseja financeiramente?</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="Desejo financeiro" value="Ter controle real de onde vai cada centavo"><div class="option-indicator"></div><span class="option-text">Ter controle real de onde vai cada centavo</span></label>
+          <label class="option"><input type="radio" name="Desejo financeiro" value="Criar previsibilidade e estabilidade — mesmo com renda variável"><div class="option-indicator"></div><span class="option-text">Criar previsibilidade e estabilidade — mesmo com renda variável</span></label>
+          <label class="option"><input type="radio" name="Desejo financeiro" value="Construir patrimônio com consistência"><div class="option-indicator"></div><span class="option-text">Construir patrimônio com consistência</span></label>
+          <label class="option"><input type="radio" name="Desejo financeiro" value="Alcançar independência financeira / FIRE"><div class="option-indicator"></div><span class="option-text">Alcançar independência financeira / FIRE</span></label>
+          <label class="option"><input type="radio" name="Desejo financeiro" value="Organizar crédito e dívidas para tomar decisões maiores"><div class="option-indicator"></div><span class="option-text">Organizar crédito e dívidas para tomar decisões maiores</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label><span class="q-num">18.</span> Qual transformação você mais quer sentir no dia a dia?</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="Transformação desejada" value="Sentir que estou no controle — sem ansiedade financeira"><div class="option-indicator"></div><span class="option-text">Sentir que estou no controle — sem ansiedade financeira</span></label>
+          <label class="option"><input type="radio" name="Transformação desejada" value="Saber exatamente quanto posso gastar sem culpa"><div class="option-indicator"></div><span class="option-text">Saber exatamente quanto posso gastar sem culpa</span></label>
+          <label class="option"><input type="radio" name="Transformação desejada" value="Me sentir um adulto financeiro — estruturado e estratégico"><div class="option-indicator"></div><span class="option-text">Me sentir um "adulto financeiro" — estruturado e estratégico</span></label>
+          <label class="option"><input type="radio" name="Transformação desejada" value="Ter liberdade para decisões de vida sem depender de salário"><div class="option-indicator"></div><span class="option-text">Ter liberdade para tomar decisões de vida sem depender de um salário</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label><span class="q-num">19.</span> Em qual prazo você espera ver resultados concretos?</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="Prazo de expectativa" value="30 a 60 dias — quero organização imediata"><div class="option-indicator"></div><span class="option-text">30 a 60 dias — quero organização imediata</span></label>
+          <label class="option"><input type="radio" name="Prazo de expectativa" value="Em torno de 3 meses — clareza e estrutura funcionando"><div class="option-indicator"></div><span class="option-text">Em torno de 3 meses — clareza e estrutura funcionando</span></label>
+          <label class="option"><input type="radio" name="Prazo de expectativa" value="1 ano — construção sólida de patrimônio e hábitos"><div class="option-indicator"></div><span class="option-text">1 ano — construção sólida de patrimônio e hábitos</span></label>
+          <label class="option"><input type="radio" name="Prazo de expectativa" value="Longo prazo — independência financeira como objetivo maior"><div class="option-indicator"></div><span class="option-text">Longo prazo — independência financeira como objetivo maior</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label><span class="q-num">20.</span> O que tornaria essa consultoria um sucesso absoluto para você?</label>
+        <textarea name="Definição de sucesso" placeholder="Ex: Ter um sistema que funciona mesmo quando minha renda cai. Saber que estou construindo algo sólido mesmo nos meses ruins..."></textarea>
+      </div>
+
+      <div class="nav">
+        <button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button>
+        <button type="button" class="btn btn-next" onclick="nextBlock()">Continuar →</button>
+      </div>
     </div>
 
+    <!-- BLOCO 5 -->
     <div class="block" data-block="5">
-      <div class="block-header"><span class="block-number">05 / 05</span><span class="block-title">Confirmação</span></div>
-      <div class="question"><label><span class="q-num">21.</span> Frequência de acompanhamento</label><div class="options"><label class="option"><input type="radio" name="frequencia" value="quinzenal"><div class="option-indicator"></div>Quinzenal</label><label class="option"><input type="radio" name="frequencia" value="mensal"><div class="option-indicator"></div>Mensal</label></div></div>
-      <div class="question"><label><span class="q-num">22.</span> Contexto adicional</label><textarea name="contexto"></textarea></div>
-      <div class="terms-box"><h4>📋 Termos</h4><p>Ao enviar, você autoriza o tratamento dos dados conforme LGPD para fins de consultoria financeira.</p></div>
-      <div class="question"><label><span class="q-num">23.</span> Concorda com os termos?</label><div class="options"><label class="option"><input type="radio" name="termos" value="aceito" required><div class="option-indicator"></div>Aceito</label></div></div>
-      <div class="nav"><button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button><button type="submit" class="btn btn-submit">Enviar aplicação ✦</button></div>
+      <div class="block-header">
+        <span class="block-number">05 / 05</span>
+        <span class="block-title">Disponibilidade e confirmação</span>
+      </div>
+
+      <div class="question">
+        <label><span class="q-num">21.</span> Com que frequência você estaria disposto(a) a ter conversas de acompanhamento?</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="Frequência de acompanhamento" value="Semanal — quero acompanhamento próximo"><div class="option-indicator"></div><span class="option-text">Semanal — quero acompanhamento próximo</span></label>
+          <label class="option"><input type="radio" name="Frequência de acompanhamento" value="Quinzenal — equilíbrio entre autonomia e suporte"><div class="option-indicator"></div><span class="option-text">Quinzenal — equilíbrio entre autonomia e suporte</span></label>
+          <label class="option"><input type="radio" name="Frequência de acompanhamento" value="Mensal — prefiro mais autonomia"><div class="option-indicator"></div><span class="option-text">Mensal — prefiro mais autonomia</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label><span class="q-num">22.</span> Há algum contexto adicional importante que eu deveria saber? <em style="font-weight:400;color:var(--text-muted)">(opcional)</em></label>
+        <textarea name="Contexto adicional" placeholder="Ex: Tenho um freela grande chegando. Estou pensando em abrir empresa. Tenho uma dívida específica que me preocupa..."></textarea>
+      </div>
+
+      <div class="sep"></div>
+
+      <div class="terms-box">
+        <h4>📋 Termos de Uso e Privacidade</h4>
+        <p>1. As informações fornecidas neste formulário serão utilizadas exclusivamente para elaboração de análise inicial do perfil financeiro, preparação da primeira conversa e eventual contato para orientação sobre o diagnóstico.</p>
+        <p>2. Seus dados não serão vendidos ou compartilhados com terceiros para fins comerciais.</p>
+        <p>3. A análise financeira tem caráter educacional e estratégico. Não constitui recomendação formal de investimento nem garantia de resultado financeiro.</p>
+        <p>4. A qualidade da análise depende diretamente da veracidade das informações fornecidas.</p>
+        <p>De acordo com o Marco Civil da Internet (Lei 12.965/2014) e a LGPD (Lei 13.709/2018), ao enviar este formulário você autoriza o tratamento dos seus dados para fins de análise de perfil e contato via WhatsApp ou e-mail. Seus dados são confidenciais e protegidos.</p>
+      </div>
+
+      <div class="question">
+        <label><span class="q-num">23.</span> Você concorda com os termos acima?</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="Aceite dos termos" value="Aceito — entendo e concordo com os termos"><div class="option-indicator"></div><span class="option-text">Aceito — entendo e concordo com os termos</span></label>
+          <label class="option"><input type="radio" name="Aceite dos termos" value="Não aceito"><div class="option-indicator"></div><span class="option-text">Não aceito</span></label>
+        </div>
+      </div>
+
+      <div id="formError" class="form-error">Algo deu errado ao enviar. Tente novamente em alguns segundos.</div>
+
+      <div class="nav">
+        <button type="button" class="btn btn-back" onclick="prevBlock()">← Voltar</button>
+        <button type="button" class="btn btn-submit" id="submitBtn" onclick="submitForm()">
+          <span class="btn-label">Enviar aplicação ✦</span>
+          <span class="spinner"></span>
+        </button>
+      </div>
     </div>
+
   </form>
 
+  <!-- SUCCESS -->
   <div class="success-screen" id="successScreen">
-    <h2>Aplicação recebida com sucesso!</h2>
-    <p>Em breve entrarei em contato via WhatsApp.</p>
+    <div class="success-icon">✦</div>
+    <h2>Aplicação recebida.</h2>
+    <p>Obrigado por dedicar alguns minutos a isso. Suas respostas vão me ajudar a chegar na nossa conversa preparado — sem perguntas genéricas, sem enrolação.</p>
+    <p>Nos próximos dias você vai receber um contato via WhatsApp ou e-mail para agendarmos nossa sessão estratégica.</p>
+    <p style="color: var(--text); font-weight: 600;">Enquanto isso, uma coisa pra você guardar:</p>
+    <p style="font-style: italic;">"O problema não é quanto você ganha. É não ter um sistema que trabalhe por você."</p>
+    <span class="success-tag">// aplicação enviada com sucesso</span>
   </div>
+
 </div>
 
 <script>
+  // ─────────────────────────────────────────────
+  // ⚙️  CONFIGURAÇÃO — substitua pelo seu Form ID
+  // ─────────────────────────────────────────────
+  const FORMSPREE_ID = "xaqlwbay";
+  // ─────────────────────────────────────────────
+
   let currentBlock = 1;
   const totalBlocks = 5;
 
@@ -273,22 +779,29 @@
 
   function showBlock(n) {
     document.querySelectorAll('.block').forEach(b => b.classList.remove('active'));
-    document.querySelector(`.block[data-block="${n}"]`).classList.add('active');
-    window.scrollTo({top:0, behavior:'smooth'});
+    const target = document.querySelector(`.block[data-block="${n}"]`);
+    if (target) { target.classList.add('active'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
     updateProgress();
   }
 
-  function nextBlock() { if (currentBlock < totalBlocks) { currentBlock++; showBlock(currentBlock); } }
-  function prevBlock() { if (currentBlock > 1) { currentBlock--; showBlock(currentBlock); } }
+  function nextBlock() {
+    if (currentBlock < totalBlocks) { currentBlock++; showBlock(currentBlock); }
+  }
+
+  function prevBlock() {
+    if (currentBlock > 1) { currentBlock--; showBlock(currentBlock); }
+  }
 
   function setScale(containerId, fieldName, val) {
-    const container = document.getElementById(containerId);
-    container.querySelectorAll('.scale-btn').forEach(btn => btn.classList.toggle('selected', btn.dataset.val === val));
+    document.getElementById(containerId).querySelectorAll('.scale-btn').forEach(btn => {
+      btn.classList.toggle('selected', btn.dataset.val === val);
+    });
     document.getElementById(fieldName).value = val;
   }
 
+  // Option click handler
   document.querySelectorAll('.option').forEach(opt => {
-    opt.addEventListener('click', function() {
+    opt.addEventListener('click', function () {
       const inp = this.querySelector('input');
       if (inp.type === 'radio') {
         document.querySelectorAll(`input[name="${inp.name}"]`).forEach(r => r.closest('.option').classList.remove('selected'));
@@ -300,6 +813,68 @@
       }
     });
   });
+
+  // Collect checkbox values as comma-separated string
+  function collectFormData() {
+    const form = document.getElementById('mainForm');
+    const data = {};
+
+    // Text inputs, email, tel, textarea, hidden
+    form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="hidden"], textarea').forEach(el => {
+      if (el.name) data[el.name] = el.value;
+    });
+
+    // Radio buttons
+    form.querySelectorAll('input[type="radio"]:checked').forEach(el => {
+      data[el.name] = el.value;
+    });
+
+    // Checkboxes — group by name
+    const checkboxGroups = {};
+    form.querySelectorAll('input[type="checkbox"]').forEach(el => {
+      if (!checkboxGroups[el.name]) checkboxGroups[el.name] = [];
+      if (el.checked) checkboxGroups[el.name].push(el.value);
+    });
+    Object.entries(checkboxGroups).forEach(([name, vals]) => {
+      data[name] = vals.length > 0 ? vals.join(', ') : 'Nenhuma selecionada';
+    });
+
+    return data;
+  }
+
+  async function submitForm() {
+    const btn = document.getElementById('submitBtn');
+    const errorEl = document.getElementById('formError');
+
+    btn.disabled = true;
+    btn.classList.add('loading');
+    errorEl.classList.remove('visible');
+
+    const data = collectFormData();
+
+    try {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (res.ok) {
+        document.getElementById('mainForm').style.display = 'none';
+        document.getElementById('successScreen').classList.add('active');
+        document.getElementById('progressFill').style.width = '100%';
+        document.getElementById('progressLabel').textContent = 'Concluído';
+        document.getElementById('progressPct').textContent = '100%';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        throw new Error('Formspree error');
+      }
+    } catch (e) {
+      errorEl.classList.add('visible');
+      btn.disabled = false;
+      btn.classList.remove('loading');
+    }
+  }
 
   updateProgress();
 </script>
