@@ -843,44 +843,40 @@
     return data;
   }
 
+  function showSuccess() {
+    document.getElementById('mainForm').style.display = 'none';
+    document.getElementById('successScreen').classList.add('active');
+    document.getElementById('progressFill').style.width = '100%';
+    document.getElementById('progressLabel').textContent = 'Concluído';
+    document.getElementById('progressPct').textContent = '100%';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   async function submitForm() {
     const btn = document.getElementById('submitBtn');
-    const errorEl = document.getElementById('formError');
-
     btn.disabled = true;
     btn.classList.add('loading');
-    errorEl.classList.remove('visible');
+    document.getElementById('formError').classList.remove('visible');
 
     const data = collectFormData();
 
-    try {
-      // Envia para Google Sheets (principal) e Formspree (e-mail) ao mesmo tempo
-      await Promise.all([
-        fetch(SHEETS_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        }),
-        fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify(data)
-        }).catch(() => {}) // e-mail é secundário — ignora erro se falhar
-      ]);
+    // Dispara Google Sheets — não aguarda resposta (no-cors é sempre opaque)
+    fetch(SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).catch(() => {});
 
-      // Mostra sucesso assim que Google Sheets receber
-      document.getElementById('mainForm').style.display = 'none';
-      document.getElementById('successScreen').classList.add('active');
-      document.getElementById('progressFill').style.width = '100%';
-      document.getElementById('progressLabel').textContent = 'Concluído';
-      document.getElementById('progressPct').textContent = '100%';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (e) {
-      errorEl.classList.add('visible');
-      btn.disabled = false;
-      btn.classList.remove('loading');
-    }
+    // Dispara Formspree para e-mail — não bloqueia o fluxo
+    fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    }).catch(() => {});
+
+    // Aguarda 800ms para garantir que as requisições saíram e mostra sucesso
+    setTimeout(showSuccess, 800);
   }
 
   updateProgress();
